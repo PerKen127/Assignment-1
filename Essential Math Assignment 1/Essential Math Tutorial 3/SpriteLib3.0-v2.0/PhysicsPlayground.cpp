@@ -22,8 +22,6 @@ void PhysicsPlayground::InitScene(float windowWidth, float windowHeight)
 
 	//Setup MainCamera Entity
 	{
-		/*Scene::CreateCamera(m_sceneReg, vec4(-75.f, 75.f, -75.f, 75.f), -100.f, 100.f, windowWidth, windowHeight, true, true);*/
-
 		//Creates Camera entity
 		auto entity = ECS::CreateEntity();
 		ECS::SetIsMainCamera(entity, true);
