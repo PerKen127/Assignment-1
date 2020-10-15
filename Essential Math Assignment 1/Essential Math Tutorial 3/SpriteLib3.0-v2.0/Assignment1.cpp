@@ -148,10 +148,6 @@ void Assignment1::KeyboardHold()
 	{
 		vel += b2Vec2(0.f, 1.f);
 	}
-	if (Input::GetKey(Key::S) || Input::GetKey(Key::DownArrow))
-	{
-		vel += b2Vec2(0.f, -1.f);
-	}
 
 	if (Input::GetKey(Key::A) || Input::GetKey(Key::LeftArrow))
 	{
