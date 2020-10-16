@@ -43,7 +43,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 
 	//setup new Entity
 	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));
+		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
 
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -53,10 +53,9 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<Transform>(entity);
 
 		//set up the components
-		std::string fileName = "HelloWorld.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 100, 60);
-		ECS::GetComponent<Sprite>(entity).SetTransparency(0.5f);
-		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));*/
+		std::string fileName = "BackgroundPlaceholder.png";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 500, 500);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
 	}
 
 	//player entity
