@@ -1,6 +1,9 @@
 #include "Assignment1.h"
-
+#include "PhysicsBody.h"
 #include "Utilities.h"
+
+//creates a timer for the inputs
+int timer = 0;
 
 Assignment1::Assignment1(std::string name)
 {
@@ -166,6 +169,7 @@ void Assignment1::KeyboardHold()
 	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
 	float speed = 10.f;
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
+	
 
 	if (Input::GetKey(Key::Shift))
 	{
@@ -174,7 +178,16 @@ void Assignment1::KeyboardHold()
 
 	if (Input::GetKey(Key::W) || Input::GetKey(Key::UpArrow))
 	{
+		timer++;
+		
 		vel += b2Vec2(0.f, 1.f);
+
+		if (timer >= 500)
+		{
+			vel += b2Vec2(0.f, -1.f);
+
+		}
+		
 	}
 
 	if (Input::GetKey(Key::A) || Input::GetKey(Key::LeftArrow))
@@ -197,8 +210,22 @@ void Assignment1::KeyboardDown()
 
 void Assignment1::KeyboardUp()
 {
-<<<<<<< HEAD
+	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	float speed = 10.f;
+	b2Vec2 vel = b2Vec2(0.f, 0.f);
 
-=======
->>>>>>> main
+	if (Input::GetKeyUp(Key::W) || Input::GetKeyUp(Key::UpArrow))
+	{
+		timer = 0;
+	}
+
+	if (Input::GetKeyUp(Key::A) || Input::GetKeyUp(Key::LeftArrow))
+	{
+		timer = 0;
+	}
+
+	if (Input::GetKeyUp(Key::D) || Input::GetKeyUp(Key::RightArrow))
+	{
+		timer = 0;
+	}
 }
