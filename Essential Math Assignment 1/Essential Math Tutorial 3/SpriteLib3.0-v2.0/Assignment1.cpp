@@ -31,7 +31,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-75.f, 75.f, -75.f, 75.f);
+		vec4 temp = vec4(-100.f, 100.f, -100.f, 100.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -43,8 +43,6 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 
 	//setup new Entity
 	{
-		/*Scene::CreateSprite(m_sceneReg, "HelloWorld.png", 100, 60, 0.5f, vec3(0.f, 0.f, 0.f));*/
-
 		//creates entity
 		auto entity = ECS::CreateEntity();
 
@@ -54,7 +52,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 
 		//set up the components
 		std::string fileName = "BackgroundPlaceholder.png";
-		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 500, 500);
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 2000, 2000);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 0.f, 0.f));
 	}
 
@@ -92,7 +90,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer()).GetBody()->SetFixedRotation(true);
 	}
 
-	//setup static box
+	//setup ground platform
 	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -116,6 +114,37 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 		b2BodyDef tempDef;
 		tempDef.type = b2_staticBody;
 		tempDef.position.Set(float32(30.f), float32(-20.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+	}
+
+	//setup ground platform
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "GroundPlaceholder.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 75, 10);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(35.f), float32(20.f));
 
 		tempBody = m_physicsWorld->CreateBody(&tempDef);
 
@@ -152,6 +181,7 @@ void Assignment1::KeyboardHold()
 	{
 		vel += b2Vec2(-1.f, 0.f);
 	}
+
 	if (Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
 	{
 		vel += b2Vec2(1.f, 0.f);
@@ -162,8 +192,10 @@ void Assignment1::KeyboardHold()
 
 void Assignment1::KeyboardDown()
 {
+
 }
 
 void Assignment1::KeyboardUp()
 {
+
 }
