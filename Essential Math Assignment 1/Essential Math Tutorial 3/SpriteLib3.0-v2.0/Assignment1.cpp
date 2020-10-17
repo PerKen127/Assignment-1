@@ -1,9 +1,9 @@
 #include "Assignment1.h"
-#include "PhysicsBody.h"
 #include "Utilities.h"
 
 //creates a timer for the inputs
-int timer = 0;
+int jumpTimer = 0;
+int runTimer = 0;
 
 Assignment1::Assignment1(std::string name)
 {
@@ -178,26 +178,37 @@ void Assignment1::KeyboardHold()
 
 	if (Input::GetKey(Key::W) || Input::GetKey(Key::UpArrow))
 	{
-		timer++;
+		jumpTimer++;
 		
 		vel += b2Vec2(0.f, 1.f);
 
-		if (timer >= 500)
+		if (jumpTimer >= 500)
 		{
 			vel += b2Vec2(0.f, -1.f);
-
 		}
 		
 	}
 
 	if (Input::GetKey(Key::A) || Input::GetKey(Key::LeftArrow))
 	{
-		vel += b2Vec2(-1.f, 0.f);
+		for (int i = 0; i < 1000; i++)
+		{
+			if (i == 0 || i % 100 == 0)
+			{
+				vel += b2Vec2(-0.1f, 0.f);
+			}
+		}
 	}
 
 	if (Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
 	{
-		vel += b2Vec2(1.f, 0.f);
+		for (int i = 0; i < 1000; i++)
+		{
+			if (i == 0 || i % 100 == 0)
+			{
+				vel += b2Vec2(0.1f, 0.f);
+			}
+		}
 	}
 
 	player.GetBody()->SetLinearVelocity(speed * vel);
@@ -216,16 +227,19 @@ void Assignment1::KeyboardUp()
 
 	if (Input::GetKeyUp(Key::W) || Input::GetKeyUp(Key::UpArrow))
 	{
-		timer = 0;
+		jumpTimer = 0;
+		runTimer = 0;
 	}
 
 	if (Input::GetKeyUp(Key::A) || Input::GetKeyUp(Key::LeftArrow))
 	{
-		timer = 0;
+		jumpTimer = 0;
+		runTimer = 0;
 	}
 
 	if (Input::GetKeyUp(Key::D) || Input::GetKeyUp(Key::RightArrow))
 	{
-		timer = 0;
+		jumpTimer = 0;
+		runTimer = 0;
 	}
 }
