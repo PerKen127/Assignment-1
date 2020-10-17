@@ -73,7 +73,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<PhysicsBody>(entity);
 
 		//sets up the components
-		std::string fileName = "PlayerPlaceholder.png";
+		std::string fileName = "LinkStandby.png";
 		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 30, 30);
 		ECS::GetComponent<Transform>(entity).SetPosition(vec3(0.f, 30.f, 2.f));
 
@@ -220,7 +220,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 
 	}
 
-	//setup platform 4
+	//setup platform 5
 	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
