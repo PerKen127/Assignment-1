@@ -5,10 +5,13 @@
 int jumpTimer = 0;
 int runTimer = 0;
 
+//creates a toggle for the speed graphs
+int toggle = 0;
+
 Assignment1::Assignment1(std::string name)
 {
 	//gravity
-	m_gravity = b2Vec2(0.f, -300.f);
+	m_gravity = b2Vec2(0.f, -400.f);
 	m_physicsWorld->SetGravity(m_gravity);
 }
 
@@ -23,7 +26,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 	//sets up aspect ratio for the camera
 	float aspectRatio = windowWidth / windowHeight;
 
-	//setup maincamera Entity
+	//setup maincamera entity
 	{
 		//creates camera entity
 		auto entity = ECS::CreateEntity();
@@ -44,7 +47,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 	}
 
-	//setup new Entity
+	//setup new entity
 	{
 		//creates entity
 		auto entity = ECS::CreateEntity();
@@ -124,7 +127,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 
 	}
 
-	//setup ground platform
+	//setup platform 1
 	{
 		//Creates entity
 		auto entity = ECS::CreateEntity();
@@ -155,6 +158,37 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 
 	}
 
+	//setup platform 2
+	{
+		//Creates entity
+		auto entity = ECS::CreateEntity();
+
+		//Add components
+		ECS::AttachComponent<Sprite>(entity);
+		ECS::AttachComponent<Transform>(entity);
+		ECS::AttachComponent<PhysicsBody>(entity);
+
+		//Sets up components
+		std::string fileName = "GroundPlaceholder.jpg";
+		ECS::GetComponent<Sprite>(entity).LoadSprite(fileName, 75, 10);
+		ECS::GetComponent<Transform>(entity).SetPosition(vec3(30.f, -20.f, 2.f));
+
+		auto& tempSpr = ECS::GetComponent<Sprite>(entity);
+		auto& tempPhsBody = ECS::GetComponent<PhysicsBody>(entity);
+
+		float shrinkX = 0.f;
+		float shrinkY = 0.f;
+		b2Body* tempBody;
+		b2BodyDef tempDef;
+		tempDef.type = b2_staticBody;
+		tempDef.position.Set(float32(180.f), float32(30.f));
+
+		tempBody = m_physicsWorld->CreateBody(&tempDef);
+
+		tempPhsBody = PhysicsBody(tempBody, float(tempSpr.GetWidth() - shrinkX), float(tempSpr.GetHeight() - shrinkY), vec2(0.f, 0.f), false);
+
+	}
+
 	ECS::GetComponent<HorizontalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 	ECS::GetComponent<VerticalScroll>(MainEntities::MainCamera()).SetFocus(&ECS::GetComponent<Transform>(MainEntities::MainPlayer()));
 }
@@ -170,21 +204,21 @@ void Assignment1::KeyboardHold()
 	float speed = 10.f;
 	b2Vec2 vel = b2Vec2(0.f, 0.f);
 	
-
+	
 	if (Input::GetKey(Key::Shift))
 	{
 		speed *= 7.f;
 	}
 
-	if (Input::GetKey(Key::W) || Input::GetKey(Key::UpArrow))
+	if (Input::GetKey(Key::W) || Input::GetKey(Key::UpArrow) || Input::GetKey(Key::Space))
 	{
 		jumpTimer++;
 		
-		vel += b2Vec2(0.f, 1.f);
+		vel += b2Vec2(0.f, 2.f);
 
-		if (jumpTimer >= 650)
+		if (jumpTimer >= 250)
 		{
-			vel += b2Vec2(0.f, -1.f);
+			vel += b2Vec2(0.f, -2.f);
 		}
 		
 	}
@@ -193,15 +227,59 @@ void Assignment1::KeyboardHold()
 	{
 		for (int i = 0; i < 1000; i++)
 		{
-			if (i == 0 || i % 100 == 0)
+			if (i == 0 || i % 50 == 0)
 			{
-				vel += b2Vec2(-0.1f, 0.f);
+				vel += b2Vec2(-0.05f, 0.f);
 			}
 		}
 	}
 
 	if (Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
 	{
+		for (int i = 0; i < 1000; i++)
+		{
+			if (i == 0 || i % 50 == 0)
+			{
+				vel += b2Vec2(0.05f, 0.f);
+			}
+		}
+	}
+
+	player.GetBody()->SetLinearVelocity(speed * vel);
+
+}
+
+void Assignment1::KeyboardDown()
+{
+	if (Input::GetKeyDown(Key::T))
+	{
+		if (toggle == 0)
+		{
+			toggle = 1;
+		}
+
+		if (toggle == 1)
+		{
+			toggle = 0;
+		}
+	}
+}
+
+void Assignment1::KeyboardUp()
+{
+
+	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
+	float speed = 10.f;
+	b2Vec2 vel = b2Vec2(0.f, 0.f);
+
+	if (Input::GetKeyUp(Key::W) || Input::GetKeyUp(Key::UpArrow) || Input::GetKeyUp(Key::Space))
+	{
+		jumpTimer = 0;
+	}
+
+	if (Input::GetKeyUp(Key::A) || Input::GetKeyUp(Key::LeftArrow))
+	{
+
 		for (int i = 0; i < 1000; i++)
 		{
 			if (i == 0 || i % 100 == 0)
@@ -211,35 +289,14 @@ void Assignment1::KeyboardHold()
 		}
 	}
 
-	player.GetBody()->SetLinearVelocity(speed * vel);
-}
-
-void Assignment1::KeyboardDown()
-{
-
-}
-
-void Assignment1::KeyboardUp()
-{
-	auto& player = ECS::GetComponent<PhysicsBody>(MainEntities::MainPlayer());
-	float speed = 10.f;
-	b2Vec2 vel = b2Vec2(0.f, 0.f);
-
-	if (Input::GetKeyUp(Key::W) || Input::GetKeyUp(Key::UpArrow))
-	{
-		jumpTimer = 0;
-		runTimer = 0;
-	}
-
-	if (Input::GetKeyUp(Key::A) || Input::GetKeyUp(Key::LeftArrow))
-	{
-		jumpTimer = 0;
-		runTimer = 0;
-	}
-
 	if (Input::GetKeyUp(Key::D) || Input::GetKeyUp(Key::RightArrow))
 	{
-		jumpTimer = 0;
-		runTimer = 0;
+		for (int i = 0; i < 1000; i++)
+		{
+			if (i == 0 || i % 100 == 0)
+			{
+				vel += b2Vec2(-0.1f, 0.f);
+			}
+		}
 	}
 }
