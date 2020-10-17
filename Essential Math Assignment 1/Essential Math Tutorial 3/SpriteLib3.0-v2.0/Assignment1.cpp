@@ -34,7 +34,7 @@ void Assignment1::InitScene(float windowWidth, float windowHeight)
 		ECS::AttachComponent<HorizontalScroll>(entity);
 		ECS::AttachComponent<VerticalScroll>(entity);
 
-		vec4 temp = vec4(-100.f, 100.f, -100.f, 100.f);
+		vec4 temp = vec4(-200.f, 200.f, -200.f, 200.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
@@ -182,7 +182,7 @@ void Assignment1::KeyboardHold()
 		
 		vel += b2Vec2(0.f, 1.f);
 
-		if (jumpTimer >= 500)
+		if (jumpTimer >= 650)
 		{
 			vel += b2Vec2(0.f, -1.f);
 		}
@@ -200,7 +200,7 @@ void Assignment1::KeyboardHold()
 		}
 	}
 
-	if (Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
+	/*if (Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
 	{
 		for (int i = 0; i < 1000; i++)
 		{
@@ -209,7 +209,12 @@ void Assignment1::KeyboardHold()
 				vel += b2Vec2(0.1f, 0.f);
 			}
 		}
-	}
+	}*/
+
+		if(Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
+		{
+			vel += b2Vec2(1.f, 0.f);		
+		}
 
 	player.GetBody()->SetLinearVelocity(speed * vel);
 }
