@@ -200,7 +200,7 @@ void Assignment1::KeyboardHold()
 		}
 	}
 
-	/*if (Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
+	if (Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
 	{
 		for (int i = 0; i < 1000; i++)
 		{
@@ -209,12 +209,7 @@ void Assignment1::KeyboardHold()
 				vel += b2Vec2(0.1f, 0.f);
 			}
 		}
-	}*/
-
-		if(Input::GetKey(Key::D) || Input::GetKey(Key::RightArrow))
-		{
-			vel += b2Vec2(1.f, 0.f);		
-		}
+	}
 
 	player.GetBody()->SetLinearVelocity(speed * vel);
 }
